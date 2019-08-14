@@ -1,0 +1,134 @@
+import Guide from '~/components/layout/guide'
+import Snippet from '~/components/snippet'
+import Caption from '~/components/text/caption'
+import { GenericLink } from '~/components/text/link'
+import Note from '~/components/text/note'
+import { InlineCode } from '~/components/text/code'
+
+export const meta = {
+  title: 'Create a Formspree Form and Deploy It with Now',
+  description:
+    'Learn how to create a Formspree Form and deploy it with ZEIT Now.',
+  published: '2019-08-15T12:00:00.860Z',
+  authors: ['msweeneydev'],
+  url: '/guides/deploying-formspree-forms-with-now',
+  editUrl: 'pages/guides/deploying-formspree-forms-with-now.mdx',
+  lastEdited: '2019-08-14T20:18:43.000Z'
+}
+
+[Formspree](https://formspree.io/) is a form backend that sends submissions via email, and connects to several 3rd party services such as Google Sheets, Mailchimp, Trello and more. Formspree also provides spam mitigation and filtering, file upload, auto responses and other tools to help you manage your forms.
+
+Integrating Formspree with [Now](/now) is very simple. It requires just a few changes to your current form HTML.
+
+This tutorial assumes you have one or more static HTML pages including a `<form>` tag. This could be created by a static site generator, rendered on the server, or even a plain HTML page. If you don’t already have a HTML form designed, check out the list of example forms in the [Formspree library](https://formspree.io/library).
+
+## Step 1: Create a New Formspree Form
+
+The first step to integrating Formspree with Now is to create a form on Formspree. You can do this on the [Formspree homepage](https://formspree.io/#setup). In the **getting started** section, enter your email into the box provided and click **Create Form**.
+
+[screenshot of getting started section]
+
+This will first ask you to provide a password, you’ll then be redirected to an integration page where you can see the form URL.
+
+## Step 2: Update Your Form HTML
+
+After creating a form you’ll be redirected to an integration page with your form URL and several examples of how to update your HTML code.
+
+[screenshot of the integration tab]
+
+Copy the form URL into your form's `action` attribute, be sure that your form’s `method` is set to `"POST"`, and ensure each input field has a `name` attribute. The `name` attributes are needed to pass the data to Formspree, and will determine what you see in submission emails, and the submissions table in Formspree.
+
+<Note hint>
+  There are several special <InlineCode>name</InlineCode> values that you can
+  use to control how your form is processed by Formspree. See the section on{' '}
+  <GenericLink href="#bonus:-special-formspree-names">
+    Special Formspree Names
+  </GenericLink>{' '}
+  below.
+</Note>
+
+The integration tab includes several examples that you can copy-and-paste depending on the type of form you are building. There’s also a list of example forms in the [Formspree library](https://formspree.io/library).
+
+With your `<form>` updated, you can test it either locally with a development server or as a deployment. In both environments, form submissions will be delivered to your inbox.
+
+## Step 3: Deploy With Now
+
+You can choose whether you want to deploy directly from the command line with [Now CLI](/download), or from a Git repository by installing either the [Now for GitHub](https://zeit.co/docs/v2/advanced/now-for-github/) or [Now for GitLab](https://zeit.co/docs/v2/advanced/now-for-gitlab/) integrations.
+
+To deploy your project from using [Now CLI](/download), all it takes is **just a single command**:
+
+<Snippet dark text="now" />
+<Caption>Deploying your project with just a single command.</Caption>
+
+That’s it! Your form will now be live and deployed to a publicly accessible url immediately.
+
+Form submissions received from either your localhost or production environments will be emailed, and show up in your form submissions list. If you want to restrict where the form can be embedded, set your production URL in the authorized domains setting in Formspree.
+
+![](https://paper-attachments.dropbox.com/s_C0C810E230C3D561C9217B646000D023766BDE777521EEB54A268456150E1569_1565804801693_Screen+Shot+2019-08-14+at+1.46.15+PM.png)
+
+## Bonus: Special Formspree Names
+
+Formspree allows you to provide specially named inputs to **control how form submissions are processed**.
+
+Below is a list some of the most commonly used values, but you can find all of them in the [Form Setup section](https://help.formspree.io/hc/en-us/sections/115002389908-Form-setup) of the Formspree [help guide](https://help.formspree.io/hc/en-us).
+
+### `name="_replyto"`
+
+Use this name to set the Reply To email address of the submission notification emails.
+
+This allows you to quickly reply to form submissions in your inbox and is shown in the example below.
+
+```
+<input type="email" name="_replyto" placeholder="your email address">
+```
+
+<Caption>
+  An example <InlineCode>input</InlineCode> element that uses the{' '}
+  <InlineCode>name="_subject"</InlineCode> attribute to set the Reply To of the
+  email.
+</Caption>
+
+### `name="_subject"`
+
+Use this name to set the subject of notification emails. This will override the default **New submission from …** subject.
+
+<Note warning>
+  You should place this in a hidden input as done in the example below.
+</Note>
+
+```
+<input type="hidden" name="_subject" value="New lead on mysite.com">
+```
+
+<Caption>
+  An example <InlineCode>input</InlineCode> element that uses the{' '}
+  <InlineCode>name="_subject"</InlineCode> attribute to set the subject of the
+  email.
+</Caption>
+
+### `name="_next"`
+
+<Note>Available on Gold and Platinum plans.</Note>
+
+By default, after submitting a form the user is redirected to the Formspree **Thank You** page.
+
+You can redirect the user to an alternative page on your own website by adding a hidden input tag with a `name="_next"` attribute.
+
+The value of the attribute should be the full URL of the page you want to redirect the user to as shown below.
+
+```
+<input type="hidden" name="_next" value="https://mysite.com/thanks.html"/>
+```
+
+<Caption>
+  An example <InlineCode>input</InlineCode> element that uses the{' '}
+  <InlineCode>name="_next"</InlineCode> attribute to provide a redirect.
+</Caption>
+
+Be sure to include the `http://` or `https://` prefix, as this is required for the redirect to work.
+
+export default ({ children }) => <Guide meta={meta}>{children}</Guide>
+
+export const config = {
+  amp: 'hybrid'
+}
