@@ -21,7 +21,6 @@ function Limits() {
     }
     getLimits()
   }, [])
-  console.log(limits)
   return limits && limits.rateLimits ? (
     <Table>
       <TableHead>
@@ -36,7 +35,7 @@ function Limits() {
       </TableHead>
       <TableBody>
         {limits.rateLimits.map(l => (
-          <TableRow>
+          <TableRow key={l.description}>
             <TableRowCell>{l.description}</TableRowCell>
             <TableRowCell>{l.max}</TableRowCell>
             <TableRowCell>{l.duration / 1000}</TableRowCell>

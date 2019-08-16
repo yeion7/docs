@@ -21,7 +21,6 @@ import Select from '~/components/select'
 import Sidebar from '~/components/layout/sidebar'
 import Note from '~/components/text/note'
 import { GenericLink } from '~/components/text/link'
-import { P } from '~/components/text'
 import ToggleGroup, { ToggleItem } from '~/components/toggle-group'
 import withPermalink from '~/lib/api/with-permalink'
 
